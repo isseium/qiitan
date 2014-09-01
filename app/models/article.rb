@@ -13,4 +13,8 @@ class Article < ActiveRecord::Base
   def point
     return stock_count * point_unit
   end
+  
+  def point_with_upper_limit
+    return (stock_count * point_unit > 5000)?5000:(stock_count * point_unit)
+  end
 end

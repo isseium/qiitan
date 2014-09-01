@@ -9,4 +9,13 @@ class User < ActiveRecord::Base
     
     sum
   end
+  
+  def total_point_with_upper_limit
+    sum = 0
+    self.articles.each do |a|
+      sum += a.point_with_upper_limit
+    end
+    
+    sum
+  end
 end

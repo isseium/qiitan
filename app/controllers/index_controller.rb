@@ -1,6 +1,8 @@
 class IndexController < ApplicationController
   def index
     @u = User.all
+    @total_articles = Article.all.count
+    @total_stock = Article.sum(:stock_count)
   end
   
   def crawl
