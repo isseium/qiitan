@@ -3,11 +3,12 @@
 <p>投稿から一ヶ月間のストック数を表示します</p>
 <a href="/crawl">更新</a> （あまり押さないでね）
 
-<h2>全体</h2>
+<h2>統計</h2>
 
 <ul>
   <li>みんなの記事数 <%= @total_articles.to_s %></li>
   <li>みんなのストック数 <%= @total_stock.to_s %></li>
+  <li>このペースだと10000ストックまであと <%= @estimate.round().to_s %> 記事</li>
 </ul>
 
 
