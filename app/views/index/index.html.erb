@@ -12,6 +12,7 @@
 
 
 <h2>ユーザ別</h2>
+<p>獲得ポイントが高い順にソート</p>
 <% @u.each do |user|%>
   <h3><%= link_to(user.name, "http://qiita.com/" + user.name) + " : " + user.total_point.to_s + " (" + user.total_point_with_upper_limit.to_s + ")"   %></h3>
   <table>
