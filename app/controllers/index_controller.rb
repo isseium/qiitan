@@ -7,7 +7,7 @@ class IndexController < ApplicationController
   
   def crawl
     # TODO: ハードコードなのであとで変更
-    users = ["isseium", "ganezasan@github", "canno", "te2ka", "s4shiki"]
+    users = ["isseium", "ganezasan", "canno", "te2ka", "s4shiki"]
     users.each do |user|
       Crawler.get user
     end
