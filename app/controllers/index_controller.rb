@@ -1,6 +1,6 @@
 class IndexController < ApplicationController
   def index
-    @u = User.joins(:articles).group("users.id").order("SUM(stock_count) desc, TO_CHAR(articles.posted_at,'dd/MM/yyyy')")
+    @u = User.joins(:articles).group("users.id").order("SUM(stock_count) desc, articles.id")
     @total_articles = Article.all.count
     @total_stock = Article.sum(:stock_count)
   end
