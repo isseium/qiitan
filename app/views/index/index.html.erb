@@ -23,7 +23,7 @@
       <th>参考Pt.</th>
       <th>投稿日</th>
     </tr>
-    <% user.articles.each do |article|%>
+    <% user.articles.sort(:posted_at).each do |article|%>
       <tr>
         <td><%= link_to(article.title, article.url) %></td>
         <td><%= article.stock_count %></td>
