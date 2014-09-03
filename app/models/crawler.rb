@@ -28,8 +28,8 @@ class Crawler
 
       # 保存
       article.tags = tags
+      article.save
       articles.push(article)
-      # article.save
     end
     
     user.articles = articles
