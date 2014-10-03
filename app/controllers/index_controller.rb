@@ -4,7 +4,6 @@ class IndexController < ApplicationController
     @total_articles = Article.all.count
     @total_stock = Article.sum(:stock_count)
     @estimate = (10000 - @total_stock) / (@total_stock / @total_articles)
-    @estimate = 0
   end
   
   def crawl
