@@ -1,8 +1,8 @@
-json.array! @item do |item|
-  json.(item, "name", "total_point" ,"key")
+json.array! @articles do |article|
+  json.(article, "name", "total_point" ,"key")
 
   json.values do
-    json.array! item["values"] do |value|
+    json.array! article["values"] do |value|
 		json.(value , "x" , "y")
     end
   end
