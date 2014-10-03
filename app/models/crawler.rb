@@ -3,20 +3,12 @@ class Crawler
   def self.get(username="isseium")
     # auth = "03429a1ab47d4fc49207993c547e0f56"
     json_articles = JSON.parse(RestClient.get "https://qiita.com/api/v1/users/#{username}/items")
-    
-    # migration用
-    json_articles += JSON.parse(RestClient.get "https://qiita.com/api/v1/users/#{username}/items?page=2")
-    
     user = User.find_or_create_by(name: username)
-    
     today = Date.today
     
     json_articles.each do |item|
-      # next if Date.parse(item["created_at"]) < (today << 1)
+      next if Date.parse(item["created_at"]) < (today << 1)
        
-      # migration用
-      next if Date.parse(item["created_at"]) < Date.new(2014, 9, 1)
-      
       article = user.articles.find_or_create_by(uuid: item["uuid"]) do |a|
         a.url = item["url"]
         a.posted_at = item["created_at"]
