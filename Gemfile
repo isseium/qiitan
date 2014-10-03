@@ -41,3 +41,5 @@ gem 'spring',        group: :development
 # gem 'debugger', group: [:development, :test]
 
 gem 'rest-client'
+gem 'rails_serve_static_assets', group: [:production]
+gem 'rails_12factor', group: [:production]
