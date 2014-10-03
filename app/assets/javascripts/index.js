@@ -1,7 +1,7 @@
 var data;
 // var parseDate = d3.time.format("%Y-%m-%d %I:%M:%S").parse;
 var parseDate = d3.time.format("%Y-%m-%d").parse;
- d3.json("/api/article/index",function(json){
+ d3.json("/api/articles",function(json){
   console.warn(json);
   jQuery.each(json, function(j, val2 ) {
     val2.values.map(function(d) {

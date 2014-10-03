@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults:{format: 'json'}  do
     get 'system/status' => 'system#status'
-    get 'article/index' => 'article#index'
+    get 'articles' => 'article#index'
   end
   
   # The priority is based upon order of creation: first created -> highest priority.
