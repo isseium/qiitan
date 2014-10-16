@@ -28,8 +28,32 @@ class Crawler
       article.tags = tags
       article.save
     end
-    
+
     1
   end
-  
+
+  def self.setLastUpdatedTime
+    ts = Time.now.to_i
+    Redis.current.set('last_updated_time', ts)
+  end
+
+  def self.getLastUpdatedTime
+    updated_ts = Redis.current.get('last_updated_time').to_i;
+    # MEMO: nil だったら 1970-01-01 が入る
+    return Time.at(updated_ts).strftime("%Y-%m-%d %H:%M:%S")
+  end
+
+  # 最終更新時間からの経過時間で状態を返してくれる
+  def self.getUpdateStatus
+    current_ts = Time.now.to_i
+    updated_ts = Redis.current.get('last_updated_time').to_i;
+    # とりあえず30分以上だったら
+    if current_ts - updated_ts > 30 * 60
+      return "success"
+    else
+      return "warning"
+    end
+  end
+
+
 end
