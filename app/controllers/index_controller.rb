@@ -13,7 +13,12 @@ class IndexController < ApplicationController
     # TODO: ハードコードなのであとで変更
     users = ["isseium", "ganezasan", "canno", "te2ka", "s4shiki", "sasarkyz"]
     users.each do |user|
-      Crawler.get user
+      Crawler.get user,
+        full_scan: true,
+        skip_condition: Proc.new { |item|
+          # 1ヶ月経過したらスキップ (NOTE: Cheekit 独自仕様)
+          Date.parse(item["created_at"]) < (Date.today << 1)
+        }
     end
 
     # 最終更新時刻を更新
