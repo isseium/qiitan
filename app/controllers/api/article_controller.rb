@@ -2,41 +2,40 @@ class Api::ArticleController < Api::ApiController
   def index
     users = User.all
 
-    values = []
-    (Date.today.months_ago(1)..Date.today).each do |i| 
-      values.push({
-        "x" => i.year.to_s+"-"+i.strftime("%m").to_s+"-"+i.strftime("%d").to_s,
+    # とりあえずグラフのテンプレートつくる
+    graph_template = []
+    (Date.today.months_ago(1)..Date.today).each do |date|
+      graph_template.push({
+        "x" => date.strftime("%Y-%m-%d"),
         "y" => 0,
         "item" => []
       })
-    end 
+    end
 
-    articles = []
+    # グラフに入れるデータを生成する
+    @graphs = []
     users.each do |user|
-      tmp_values = Marshal.load(Marshal.dump(values))
-      # p articles
+      # Deep Copy
+      user_graph = Marshal.load(Marshal.dump(graph_template))
       all_count = 0
-      tmp_values.each do |tmp_item|
-        user.articles.each do |item|
-          if Date.parse(item.posted_at) == Date.parse(tmp_item["x"]) then
-            tmp_item["y"] += item.stock_count.to_i
+      # それぞれの日付にデータを突っ込んでく
+      user_graph.each do |graph_parts|
+        user.articles.each do |article|
+          if Date.parse(article.posted_at) == Date.parse(graph_parts["x"])
+            graph_parts["y"] += article.stock_count.to_i
           end
-          tmp_item["item"].push(item)
-        end  
-        tmp_item["y"] += all_count # 前日分も反映させて
-        all_count = tmp_item["y"] # 当日分をたす
+        end
+        graph_parts["y"] += all_count # 前日分も反映させて
+        all_count = graph_parts["y"] # 当日分をたす
       end
-      articles.push({
+
+      @graphs.push({
         "key" => user.name.to_s+" ("+user.total_point.to_s+")" ,
         "name" => user.name,
         "total_point" => user.total_point,
-        "values" => tmp_values
+        "values" => user_graph
       })
 
-      # p articles
     end
-    # @u = users
-    @articles = articles
-    # @item = articles
   end
 end
