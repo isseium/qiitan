@@ -15,8 +15,7 @@ class Api::ArticleController < Api::ApiController
     # グラフに入れるデータを生成する
     @graphs = []
     users.each do |user|
-      # Deep Copy
-      user_graph = Marshal.load(Marshal.dump(graph_template))
+      user_graph = graph_template.deep_dup
       all_count = 0
       # それぞれの日付にデータを突っ込んでく
       user_graph.each do |graph_parts|
