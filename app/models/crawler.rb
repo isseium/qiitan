@@ -1,14 +1,27 @@
 class Crawler
   
-  def self.get(username="isseium")
-    # auth = "03429a1ab47d4fc49207993c547e0f56"
-    json_articles = JSON.parse(RestClient.get "https://qiita.com/api/v1/users/#{username}/items")
-    user = User.find_or_create_by(name: username)
-    today = Date.today
+  def self.get(username="isseium", full_scan: false, skip_condition: Proc.new {true})
+    # フルスキャン（ページングを加味したうえでクロールする）
+    if full_scan
+      hash_articles = []
+      loop.with_index do |_, i|
+        pre_articles = JSON.parse(RestClient.get "https://qiita.com/api/v1/users/#{username}/items?page=#{i+1}")
+        break if pre_articles.size == 0 
+        hash_articles +=  pre_articles
+      end
+    else
+      hash_articles = JSON.parse(RestClient.get "https://qiita.com/api/v1/users/#{username}/items")
+    end
     
-    json_articles.each do |item|
-      next if Date.parse(item["created_at"]) < (today << 1)
+    user = User.find_or_create_by(name: username)
+    
+    hash_articles.each do |item|
+      today = Date.today
+      next if skip_condition.call(item)
        
+      #================================================================================
+      # article 更新
+      #================================================================================
       article = user.articles.find_or_create_by(uuid: item["uuid"]) do |a|
         a.url = item["url"]
         a.posted_at = item["created_at"]
@@ -27,6 +40,13 @@ class Crawler
       # 保存
       article.tags = tags
       article.save
+      
+      #================================================================================
+      # article_stat 更新
+      #================================================================================
+      stat = article.article_stats.find_or_create_by(date: Date.today)
+      stat.stock_count = item["stock_count"]
+      stat.save
     end
 
     1
