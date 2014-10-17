@@ -1,6 +1,6 @@
 class Crawler
   
-  def self.get(username="isseium", full_scan: false, skip_condition: Proc.new {true})
+  def self.get(username="isseium", full_scan: false, skip_condition: Proc.new {true}, date: Date.today)
     # フルスキャン（ページングを加味したうえでクロールする）
     if full_scan
       hash_articles = []
@@ -16,7 +16,6 @@ class Crawler
     user = User.find_or_create_by(name: username)
     
     hash_articles.each do |item|
-      today = Date.today
       next if skip_condition.call(item)
        
       #================================================================================
@@ -44,7 +43,7 @@ class Crawler
       #================================================================================
       # article_stat 更新
       #================================================================================
-      stat = article.article_stats.find_or_create_by(date: Date.today)
+      stat = article.article_stats.find_or_create_by(date: date)
       stat.stock_count = item["stock_count"]
       stat.save
     end
