@@ -1,6 +1,7 @@
 class Article < ActiveRecord::Base
   belongs_to :user
   has_and_belongs_to_many :tags
+  has_many :article_stats
   
   def point_unit
     self.tags.each do |tag|
