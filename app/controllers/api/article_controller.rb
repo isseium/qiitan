@@ -16,7 +16,7 @@ class Api::ArticleController < Api::ApiController
     @graphs = []
     users.each do |user|
       user_graph = graph_template.deep_dup
-      all_count = 0
+      all_stock_count = 0
       # それぞれの日付にデータを突っ込んでく
       user_graph.each do |graph_parts|
         user.articles.each do |article|
@@ -24,14 +24,14 @@ class Api::ArticleController < Api::ApiController
             graph_parts["y"] += article.stock_count.to_i
           end
         end
-        graph_parts["y"] += all_count # 前日分も反映させて
-        all_count = graph_parts["y"] # 当日分をたす
+        graph_parts["y"] += all_stock_count # 前日分も反映させて
+        all_stock_count = graph_parts["y"] # 当日分をたす
       end
 
       @graphs.push({
-        "key" => user.name.to_s+" ("+user.total_point.to_s+")" ,
+        "key" => "#{user.name.to_s} (#{all_stock_count})" ,
         "name" => user.name,
-        "total_point" => user.total_point,
+        "total_stock" => all_stock_count,
         "values" => user_graph
       })
 

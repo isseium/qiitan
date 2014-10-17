@@ -1,5 +1,5 @@
 json.array! @graphs do |graph|
-  json.(graph, "name", "total_point" ,"key")
+  json.(graph, "name", "total_stock" ,"key")
 
   json.values do
     json.array! graph["values"] do |value|
